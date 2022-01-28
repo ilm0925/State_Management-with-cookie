@@ -17,12 +17,15 @@ const data = [
 ];
 
 function Auth(id, pwd) {
+  let answer = false;
+  // console.log(id, pwd);
   data.forEach((info) => {
+    // console.log(id == info.id && pwd == info.password);
     if (id == info.id && pwd == info.password) {
-      return info.name;
+      answer = info.name;
     }
   });
-  return false;
+  return answer;
 }
 
 export { Auth };
