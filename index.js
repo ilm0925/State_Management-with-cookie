@@ -12,7 +12,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send(views.main(null, 0));
+  const cookie = req.cookies;
+
+  console.log(cookie.NAME);
+  if (cookie.NAME == null && cookie.ID && cookie.PWD == null) {
+    res.send(views.main(null, 0));
+  } else {
+    res.send(views.main(cookie.NAME, 1));
+  }
 });
 app.get("/login", (req, res) => {
   res.send(views.login());
@@ -28,7 +35,7 @@ app.post("/login", async (req, res) => {
     res.set({
       "Set-Cookie": [`ID=${body.id}`, `PWD=${body.pwd}`, `NAME=${auth}`],
     });
-    res.send("로그인성공");
+    res.redirect("/");
   }
 });
 
