@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   const cookie = req.cookies;
 
   console.log(cookie.NAME);
-  if (cookie.NAME == null && cookie.ID && cookie.PWD == null) {
+  if (cookie.NAME == null && cookie.ID == null && cookie.PWD == null) {
     res.send(views.main(null, 0));
   } else {
     res.send(views.main(cookie.NAME, 1));
@@ -30,7 +30,7 @@ app.post("/login", async (req, res) => {
   const auth = Auth(body.id, body.pwd);
   console.log(auth);
   if (auth == false) {
-    res.send("<script>alert('다시 로그인 해주세요')</script>");
+    res.send("<script>alert('다시 로그인 해주세요');history.back();</script>");
   } else {
     res.set({
       "Set-Cookie": [`ID=${body.id}`, `PWD=${body.pwd}`, `NAME=${auth}`],
@@ -38,7 +38,12 @@ app.post("/login", async (req, res) => {
     res.redirect("/");
   }
 });
-
+app.post("/logout", (req, res) => {
+  res.clearCookie("ID");
+  res.clearCookie("PWD");
+  res.clearCookie("NAME");
+  res.redirect("/");
+});
 app.listen(3000, () => {
   console.log(`open Sever ${3000}`);
 });
